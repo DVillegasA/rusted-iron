@@ -1,2 +1,15 @@
-# rusted-iron
-Console application for the Ironsworm TTRPG system, that aims to simplify solo play
+# Rusted Iron
+
+Console application for the Ironsworm TTRPG system, that aims to simplify solo play, by providing an interface that takes care of all the dice roles and conveniently keeps the rules for the different _Moves_ in the game within the application itself.
+
+## Objectives
+
+The application should be able to do the following:
+
+- [ ] Create a new character.
+- [ ] Load an existing character from a file provided by the user.
+- [ ] Keep track and update the _Momentum_, _Health_, _Spirit_, _Supply_ and _Progress_ trackers.
+- [ ] Perform _Action Rolls_ based on the character stats.
+- [ ] Perform _Progress Rolls_ based on the different _Progress Trackers_.
+- [ ] Roll on the different _Oracle Tables_.
+- [ ] Display the different _Moves_ that the player can do on demand.
