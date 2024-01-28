@@ -8,7 +8,8 @@ The application should be able to do the following:
 
 - [ ] Create a new character.
 - [ ] Load an existing character from a file provided by the user.
-- [ ] Keep track and update the _Momentum_, _Health_, _Spirit_, _Supply_ and _Progress_ trackers.
+- [ ] Keep track and update the _Momentum_, _Health_, _Spirit_, and _Supply_.
+- [ ] Create and keep track of different _Progress_ trackers.
 - [ ] Perform _Action Rolls_ based on the character stats.
 - [ ] Perform _Progress Rolls_ based on the different _Progress Trackers_.
 - [ ] Roll on the different _Oracle Tables_.
