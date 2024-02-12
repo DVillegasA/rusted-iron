@@ -1,5 +1,8 @@
 use rand::Rng;
 use std::io;
+use std::io::Read;
+use std::fs::File;
+use serde::{Deserialize, Serialize};
 
 enum ActionResult {
     StrongHit,
@@ -8,13 +11,68 @@ enum ActionResult {
 }
 
 struct Action {
-    challenge: (u32, u32),
-    action: u32,
+    challenge: (u8, u8),
+    action: u8,
     result: ActionResult,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct Stats {
+    edge: u8,
+    heart: u8,
+    iron: u8,
+    shadow: u8,
+    wits: u8
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Momentum {
+    current: i8,
+    max: u8,
+    reset: u8
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Conditions {
+    wounded: bool,
+    shaken: bool,
+    unprepared: bool,
+    encumbered: bool
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Banes {
+    maimed: bool,
+    corrupted: bool
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Burdens {
+    cursed: bool,
+    tormented: bool
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Debilities {
+    conditions: Conditions,
+    banes: Banes,
+    burdens: Burdens
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct CharacterSheet {
+    name: String,
+    experience: u8,
+    stats: Stats,
+    health: u8,
+    spirit: u8,
+    supply: u8,
+    momentum: Momentum,
+    debilities: Debilities
+}
+
 impl Action {
-    fn roll(modifier: u32) -> Self {
+    fn roll(modifier: u8) -> Self {
         let mut gen = rand::thread_rng();
         let challenge_1 = gen.gen_range(1..=10);
         let challenge_2 = gen.gen_range(1..=10);
@@ -40,6 +98,13 @@ impl Action {
 
 
 fn main() {
+    let mut file = File::open("docs/example_character.json").unwrap();
+    let mut data = String::new();
+    file.read_to_string(&mut data).unwrap();
+
+    let character: CharacterSheet = serde_json::from_str(&data).expect("JSON was not well-formatted");
+
+    println!("Loaded character sheet for {}.", character.name);
     println!("Rolling for Action!");
 
     loop {
@@ -53,7 +118,7 @@ fn main() {
             break;
         }
 
-        let modifier: u32 = match modifier.trim().parse() {
+        let modifier: u8 = match modifier.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
