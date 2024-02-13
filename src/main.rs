@@ -2,7 +2,8 @@ use rand::Rng;
 use std::io;
 use std::io::Read;
 use std::fs::File;
-use serde::{Deserialize, Serialize};
+
+mod character;
 
 enum ActionResult {
     StrongHit,
@@ -14,61 +15,6 @@ struct Action {
     challenge: (u8, u8),
     action: u8,
     result: ActionResult,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Stats {
-    edge: u8,
-    heart: u8,
-    iron: u8,
-    shadow: u8,
-    wits: u8
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Momentum {
-    current: i8,
-    max: u8,
-    reset: u8
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Conditions {
-    wounded: bool,
-    shaken: bool,
-    unprepared: bool,
-    encumbered: bool
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Banes {
-    maimed: bool,
-    corrupted: bool
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Burdens {
-    cursed: bool,
-    tormented: bool
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Debilities {
-    conditions: Conditions,
-    banes: Banes,
-    burdens: Burdens
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct CharacterSheet {
-    name: String,
-    experience: u8,
-    stats: Stats,
-    health: u8,
-    spirit: u8,
-    supply: u8,
-    momentum: Momentum,
-    debilities: Debilities
 }
 
 impl Action {
@@ -102,7 +48,7 @@ fn main() {
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
 
-    let character: CharacterSheet = serde_json::from_str(&data).expect("JSON was not well-formatted");
+    let character: character::CharacterSheet = serde_json::from_str(&data).expect("JSON was not well-formatted");
 
     println!("Loaded character sheet for {}.", character.name);
     println!("Rolling for Action!");
