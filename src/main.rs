@@ -42,6 +42,47 @@ impl Action {
 
 }
 
+fn roll_for_action(player: &character::CharacterSheet) {
+    println!("\nPlease select which stat to use: ");
+    println!("1) Edge");
+    println!("2) Heart");
+    println!("3) Iron");
+    println!("4) Shadow");
+    println!("5) Wits");
+    let mut modifier = String::new();
+
+    io::stdin().read_line(&mut modifier).expect("Failed to read line");
+
+    let modifier: u8 = match modifier.trim().parse() {
+        Ok(num) => num,
+        Err(_) => return,
+    };
+
+    let roll_result = match modifier {
+        1 => player.roll_edge(),
+        2 => player.roll_heart(),
+        3 => player.roll_iron(),
+        4 => player.roll_shadow(),
+        5 => player.roll_wits(),
+        _ => {
+            println!("The value given doesn't correspond with any stat.");
+            return;
+        }
+    };
+
+    println!("\nYour Action Score: {}", roll_result.action);
+    println!("Your Challenge Dice: {} {}", roll_result.challenge.0, roll_result.challenge.1);
+
+    if roll_result.challenge.0 == roll_result.challenge.1 {
+        println!("CRITICAL RESULT!")
+    }
+
+    match roll_result.result {
+        ActionResult::StrongHit => println!("You score a Strong Hit!!!"),
+        ActionResult::WeakHit => println!("You score a Weak Hit"),
+        ActionResult::Miss => println!("Darn It, you score a Miss!"),
+    }
+}
 
 fn main() {
     let mut file = File::open("docs/example_character.json").unwrap();
@@ -54,49 +95,22 @@ fn main() {
     println!("Rolling for Action!");
 
     loop {
-        println!("\nPlease select which stat to use: ");
-        println!("1) Edge");
-        println!("2) Heart");
-        println!("3) Iron");
-        println!("4) Shadow");
-        println!("5) Wits");
-        let mut modifier = String::new();
+        println!("\nPlease select an option ");
+        println!("Action: Performs an action roll");
+        println!("Exit: Exits the program");
+        let mut option = String::new();
     
-        io::stdin().read_line(&mut modifier).expect("Failed to read line");
+        io::stdin().read_line(&mut option).expect("Failed to read line");
         
+        let option = option.trim().to_lowercase();
         // End the program if the user inputs "exit".
-        if modifier.trim().to_lowercase().eq(&String::from("exit")) {
+        if option.eq(&String::from("exit")) {
             break;
-        }
-
-        let modifier: u8 = match modifier.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-    
-        let roll_result = match modifier {
-            1 => player_character.roll_edge(),
-            2 => player_character.roll_heart(),
-            3 => player_character.roll_iron(),
-            4 => player_character.roll_shadow(),
-            5 => player_character.roll_wits(),
-            _ => {
-                println!("The value given doesn't correspond with any stat.");
-                continue;
-            }
-        };
-    
-        println!("Your Action Score: {}", roll_result.action);
-        println!("Your Challenge Dice: {} {}", roll_result.challenge.0, roll_result.challenge.1);
-
-        if roll_result.challenge.0 == roll_result.challenge.1 {
-            println!("CRITICAL RESULT!")
-        }
-
-        match roll_result.result {
-            ActionResult::StrongHit => println!("You score a Strong Hit!!!"),
-            ActionResult::WeakHit => println!("You score a Weak Hit"),
-            ActionResult::Miss => println!("Darn It, you score a Miss!"),
+        } else if option.eq(&String::from("action")) {
+            roll_for_action(&player_character);
+        } else {
+            println!("Please input a valid option.");
+            continue;
         }
     }
 }
