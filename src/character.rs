@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use crate::Action;
 
 #[derive(Serialize, Deserialize)]
 pub struct Stats {
@@ -53,4 +54,22 @@ pub struct CharacterSheet {
     pub supply: u8,
     pub momentum: Momentum,
     pub debilities: Debilities
+}
+
+impl CharacterSheet {
+    pub fn roll_edge(&self) -> Action {
+        Action::roll(self.stats.edge)
+    }
+    pub fn roll_heart(&self) -> Action {
+        Action::roll(self.stats.heart)
+    }
+    pub fn roll_iron(&self) -> Action {
+        Action::roll(self.stats.iron)
+    }
+    pub fn roll_shadow(&self) -> Action {
+        Action::roll(self.stats.shadow)
+    }
+    pub fn roll_wits(&self) -> Action {
+        Action::roll(self.stats.wits)
+    }
 }

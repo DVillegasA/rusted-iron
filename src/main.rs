@@ -48,13 +48,18 @@ fn main() {
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
 
-    let character: character::CharacterSheet = serde_json::from_str(&data).expect("JSON was not well-formatted");
+    let player_character: character::CharacterSheet = serde_json::from_str(&data).expect("JSON was not well-formatted");
 
-    println!("Loaded character sheet for {}.", character.name);
+    println!("Loaded character sheet for {}.", player_character.name);
     println!("Rolling for Action!");
 
     loop {
-        println!("\nPlease input your modifier: ");
+        println!("\nPlease select which stat to use: ");
+        println!("1) Edge");
+        println!("2) Heart");
+        println!("3) Iron");
+        println!("4) Shadow");
+        println!("5) Wits");
         let mut modifier = String::new();
     
         io::stdin().read_line(&mut modifier).expect("Failed to read line");
@@ -69,7 +74,17 @@ fn main() {
             Err(_) => continue,
         };
     
-        let roll_result = Action::roll(modifier);
+        let roll_result = match modifier {
+            1 => player_character.roll_edge(),
+            2 => player_character.roll_heart(),
+            3 => player_character.roll_iron(),
+            4 => player_character.roll_shadow(),
+            5 => player_character.roll_wits(),
+            _ => {
+                println!("The value given doesn't correspond with any stat.");
+                continue;
+            }
+        };
     
         println!("Your Action Score: {}", roll_result.action);
         println!("Your Challenge Dice: {} {}", roll_result.challenge.0, roll_result.challenge.1);
