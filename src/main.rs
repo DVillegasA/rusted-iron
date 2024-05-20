@@ -1,5 +1,5 @@
 use std::io;
-use std::io::Read;
+use std::io::{Read, IsTerminal};
 use std::fs::File;
 
 mod character;
@@ -69,6 +69,29 @@ fn roll_for_action(player: &character::CharacterSheet) {
 }
 
 fn main() {
+    println!("Welcome to Rusted Iron!");
+
+    loop {
+        // TODO: Here we need to check the option selected for the user
+        // and implement the logics for creating a character sheet or loading one for memory.
+        println!("\nPlease select an option");
+        println!("Create: create a new character sheet");
+        println!("Load: load an existing character sheet\n");
+        let mut option = String::new();
+    
+        io::stdin().read_line(&mut option).expect("Failed to read line");    
+        let option = option.trim().to_lowercase();
+    
+        if option.eq(&String::from("load")) {
+            break;
+        } else if option.eq(&String::from("create")) {
+            break;
+        } else {
+            println!("Please input a valid option.");
+            continue;
+        }
+    }
+
     let mut file = File::open("docs/example_character.json").unwrap();
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
