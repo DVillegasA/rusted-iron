@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use crate::Action;
+use crate::action::Action;
 
 #[derive(Serialize, Deserialize)]
 pub struct Stats {
