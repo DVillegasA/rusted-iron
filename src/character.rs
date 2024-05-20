@@ -73,3 +73,43 @@ impl CharacterSheet {
         Action::roll(self.stats.wits)
     }
 }
+
+pub fn character_creation() -> CharacterSheet {
+    let stats = Stats {
+        edge: 0,
+        heart: 0,
+        iron: 0,
+        shadow: 0,
+        wits: 0
+    };
+
+    CharacterSheet {
+        name: String::from(""),
+        experience: 0,
+        stats: stats,
+        health: 5,
+        spirit: 5,
+        supply: 5,
+        momentum: Momentum {
+            current: 2,
+            max: 10,
+            reset: 2
+        },
+        debilities: Debilities {
+            conditions: Conditions {
+                wounded: false,
+                shaken: false,
+                unprepared: false,
+                encumbered: false
+            },
+            banes: Banes {
+                maimed: false,
+                corrupted: false
+            },
+            burdens: Burdens {
+                cursed: false,
+                tormented: false
+            }
+        }
+    }
+}
