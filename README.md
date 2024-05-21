@@ -6,7 +6,7 @@ Console application for the Ironsworm TTRPG system, that aims to simplify solo p
 
 The application should be able to do the following:
 
-- [ ] Create a new character.
+- [x] Create a new character.
 - [x] Load an existing character from a file provided by the user.
 - [ ] Keep track and update the _Momentum_, _Health_, _Spirit_, and _Supply_.
 - [ ] Create and keep track of different _Progress_ trackers.

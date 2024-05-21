@@ -1,4 +1,4 @@
-use std::io;
+use std::{fs, io};
 use std::io::{Read, Write};
 use std::fs::File;
 use std::path::Path;
@@ -8,8 +8,8 @@ mod action;
 
 fn main() {
     println!("Welcome to Rusted Iron!");
-    let mut file;
-
+    let player_character: character::CharacterSheet;
+    
     loop {
         println!("\nPlease select an option");
         println!("Create: create a new character sheet");
@@ -31,27 +31,29 @@ fn main() {
             let path = Path::new(&trimmed_path_file);
             
             if path.exists(){
-                file = File::open(trimmed_path_file).unwrap();
+                let mut data = String::new();
+                let mut file = File::open(trimmed_path_file).unwrap();
+                file.read_to_string(&mut data).unwrap();
+                player_character = serde_json::from_str(&data).expect("JSON was not well-formatted");
                 break;
             } else {
                 println!("Path does not exist.");
                 continue
             }
-        // TODO: Here we need to implement the logics for creating a new character sheet.
         } else if option.eq(&String::from("create")) {
-            let _ = character::character_creation();
-            file = File::open("docs/example_character.json").unwrap();
+            player_character = character::character_creation();
+
+            let mut path_name = player_character.name.clone().replace(' ', "_");
+            path_name.push_str(".json");
+            let path = Path::new(&path_name);
+            let data = serde_json::to_string(&player_character).unwrap();
+            fs::write(path, data).expect("Unable to write file.");
             break;
         } else {
             println!("Please input a valid option.");
             continue;
         }
     }
-
-    let mut data = String::new();
-    file.read_to_string(&mut data).unwrap();
-
-    let player_character: character::CharacterSheet = serde_json::from_str(&data).expect("JSON was not well-formatted");
 
     println!("Loaded character sheet for {}.", player_character.name);
 
