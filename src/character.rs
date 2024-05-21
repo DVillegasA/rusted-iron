@@ -1,3 +1,5 @@
+use std::io;
+use std::io::Write;
 use serde::{Deserialize, Serialize};
 use crate::action::Action;
 
@@ -75,6 +77,29 @@ impl CharacterSheet {
 }
 
 pub fn character_creation() -> CharacterSheet {
+    println!("Creating a new character.\n");
+    
+    let mut character_name = String::new();
+    print!("\nProvide the name for your new character: ");
+    std::io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut character_name).expect("Failed to read line");
+
+    let mut vec_stats: Vec<String> = vec![
+        "edge".to_string(), 
+        "heart".to_string(), 
+        "iron".to_string(), 
+        "shadow".to_string(), 
+        "wits".to_string()
+    ];
+
+    println!("Ironsworn uses five stats, each with values from 1 to 3, that are added to your action rolls.");
+    println!("  - Edge: Quickness, agility, and prowess in ranged combat.");
+    println!("  - Heart: Courage, willpower, empathy, sociability, and loyalty.");
+    println!("  - Iron: Physical strength, endurance, aggressiveness, and prowess in close combat.");
+    println!("  - Shadow: Sneakiness, deceptiveness, and cunning.");
+    println!("  - Wits: Expertise, knowledge, and observation.");
+    println!("Now you will arrange the following bonuses on your character's stats: 3 2 2 1 1");
+
     let stats = Stats {
         edge: 0,
         heart: 0,
@@ -84,7 +109,7 @@ pub fn character_creation() -> CharacterSheet {
     };
 
     CharacterSheet {
-        name: String::from(""),
+        name: character_name,
         experience: 0,
         stats: stats,
         health: 5,
